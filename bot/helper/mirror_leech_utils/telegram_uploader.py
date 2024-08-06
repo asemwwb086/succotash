@@ -117,6 +117,7 @@ class TgUploader:
         else:
             self._sent_msg = self._listener.message
         return True
+        await deleteMessage(msg)
 
     async def _prepare_file(self, file_, dirpath, delete_file):
         if self._lprefix:
