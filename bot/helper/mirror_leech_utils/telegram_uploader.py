@@ -83,7 +83,7 @@ class TgUploader:
 
     async def _msg_to_reply(self):
         if self._listener.upDest:
-            msg = self._listener.name
+            msg = " "
             try:
                 if self._user_session:
                     self._sent_msg = await user.send_message(
@@ -282,8 +282,6 @@ class TgUploader:
                     self._last_msg_in_group = False
                     self._last_uploaded = 0
                     await self._upload_file(cap_mono, file_, f_path)
-                    if self._sent_msg:
-                        await deleteMessage(self._sent_msg(msg))
                     if self._listener.isCancelled:
                         return
                     if (
