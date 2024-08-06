@@ -83,7 +83,11 @@ class TgUploader:
 
     async def _msg_to_reply(self):
         if self._listener.upDest:
-            msg = "ok"
+            msg = (
+                self._listener.name
+                if self._listener.isSuperChat
+                else self._listener.message.text.lstrip("/")
+            )
             try:
                 if self._user_session:
                     self._sent_msg = await user.send_message(
