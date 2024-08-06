@@ -83,11 +83,23 @@ class TgUploader:
 
     async def _msg_to_reply(self):
         if self._listener.upDest:
-            msg = (
-                self._listener.message.link
-                if self._listener.isSuperChat
-                else self._listener.message.text.lstrip("/")
-            )
+            msg = ""
+            try:
+                if self._user_session:
+                    self._sent_msg = await user.send_message(
+                        chat_id=self._listener.upDest,
+                        text=msg,
+                        disable_web_page_preview=True,
+                        disable_notification=True,
+                    )
+                else:
+                    self._sent_msg = await self._listener.client.send_message(
+                        chat_id=self._listener.upDest,
+                        text=msg,
+                        disable_web_page_preview=True,
+                        disable_notification=True,
+                    )
+                    self._is_private = self._sent_msg.chat.type.name == "PRIVATE"
             except Exception as e:
                 await self._listener.onUploadError(str(e))
                 return False
