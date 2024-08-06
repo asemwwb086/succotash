@@ -81,7 +81,30 @@ class TgUploader:
         if not await aiopath.exists(self._thumb):
             self._thumb = None
 
-    
+    async def _msg_to_reply(self):
+        if self._listener.upDest:
+            msg = (
+                self._listener.message.link
+                if self._listener.isSuperChat
+                else self._listener.message.text.lstrip("/")
+            )
+            except Exception as e:
+                await self._listener.onUploadError(str(e))
+                return False
+        elif self._user_session:
+            self._sent_msg = await user.get_messages(
+                chat_id=self._listener.message.chat.id, message_ids=self._listener.mid
+            )
+            if self._sent_msg is None:
+                self._sent_msg = await user.send_message(
+                    chat_id=self._listener.message.chat.id,
+                    text="Deleted Cmd Message! Don't delete the cmd message again!",
+                    disable_web_page_preview=True,
+                    disable_notification=True,
+                )
+        else:
+            self._sent_msg = self._listener.message
+        return True
 
     async def _prepare_file(self, file_, dirpath, delete_file):
         if self._lprefix:
